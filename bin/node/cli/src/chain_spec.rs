@@ -157,6 +157,9 @@ fn staging_testnet_config_genesis() -> GenesisConfig {
 /// Staging testnet config.
 pub fn staging_testnet_config() -> ChainSpec {
 	let boot_nodes = vec![];
+	let mut prop = sc_service::Properties::new();
+	prop.insert("tokenDecimals".to_string(), 12.into());
+	prop.insert("tokenSymbol".to_string(), "FANT".into());
 	ChainSpec::from_genesis(
 		"Staging Testnet",
 		"staging_testnet",
@@ -166,7 +169,7 @@ pub fn staging_testnet_config() -> ChainSpec {
 		Some(TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])
 			.expect("Staging telemetry url is valid; qed")),
 		None,
-		None,
+		Some(prop),
 		Default::default(),
 	)
 }
@@ -342,15 +345,18 @@ fn development_config_genesis() -> GenesisConfig {
 
 /// Development config (single validator Alice)
 pub fn development_config() -> ChainSpec {
+	let mut prop = sc_service::Properties::new();
+	prop.insert("tokenDecimals".to_string(), 12.into());
+	prop.insert("tokenSymbol".to_string(), "FANT".into());
 	ChainSpec::from_genesis(
-		"Development",
-		"dev",
+		"Fantour Development",
+		"fantour_dev",
 		ChainType::Development,
 		development_config_genesis,
 		vec![],
 		None,
 		None,
-		None,
+		Some(prop),
 		Default::default(),
 	)
 }
@@ -369,15 +375,18 @@ fn local_testnet_genesis() -> GenesisConfig {
 
 /// Local testnet config (multivalidator Alice + Bob)
 pub fn local_testnet_config() -> ChainSpec {
+	let mut prop = sc_service::Properties::new();
+	prop.insert("tokenDecimals".to_string(), 12.into());
+	prop.insert("tokenSymbol".to_string(), "FANT".into());
 	ChainSpec::from_genesis(
-		"Local Testnet",
-		"local_testnet",
+		"Fantour Testnet",
+		"fantour_testnet",
 		ChainType::Local,
 		local_testnet_genesis,
 		vec![],
 		None,
 		None,
-		None,
+		Some(prop),
 		Default::default(),
 	)
 }
