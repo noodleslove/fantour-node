@@ -1004,6 +1004,17 @@ impl pallet_assets::Config for Runtime {
 	type WeightInfo = pallet_assets::weights::SubstrateWeight<Runtime>;
 }
 
+// ------------------------ ORML nft configuration ------------------------
+
+impl orml_nft::Config for Runtime {
+	type ClassId = u64;
+	type TokenId = u64;
+	type ClassData = ();
+	type TokenData = ();
+}
+
+// ------------------------ End of ORML configuration ------------------------
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -1046,6 +1057,8 @@ construct_runtime!(
 		Assets: pallet_assets::{Module, Call, Storage, Event<T>},
 		Mmr: pallet_mmr::{Module, Storage},
 		Lottery: pallet_lottery::{Module, Call, Storage, Event<T>},
+		// ORML nft module
+		NonFungibleTokenModule: orml_nft::{Module, Storage, Config<T>},
 	}
 );
 
