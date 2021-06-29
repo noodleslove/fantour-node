@@ -40,12 +40,6 @@ impl frame_system::Config for Runtime {
 	type BaseCallFilter = ();
 	type SystemWeightInfo = ();
 	type SS58Prefix = ();
-	type OnSetCode = ();
-}
-
-parameter_types! {
-	pub const MaxClassMetadata: u32 = 1;
-	pub const MaxTokenMetadata: u32 = 1;
 }
 
 impl Config for Runtime {
@@ -53,12 +47,10 @@ impl Config for Runtime {
 	type TokenId = u64;
 	type ClassData = ();
 	type TokenData = ();
-	type MaxClassMetadata = MaxClassMetadata;
-	type MaxTokenMetadata = MaxTokenMetadata;
 }
 
-type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Runtime>;
-type Block = frame_system::mocking::MockBlock<Runtime>;
+pub type Block = sp_runtime::generic::Block<Header, UncheckedExtrinsic>;
+pub type UncheckedExtrinsic = sp_runtime::generic::UncheckedExtrinsic<u32, Call, u32, ()>;
 
 construct_runtime!(
 	pub enum Runtime where
@@ -66,8 +58,9 @@ construct_runtime!(
 		NodeBlock = Block,
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
-		System: frame_system::{Pallet, Call, Storage, Config, Event<T>},
-		NonFungibleTokenModule: nft::{Pallet, Storage, Config<T>},
+		System: frame_system::{Module, Call, Storage, Config, Event<T>},
+		NonFungibleTokenModule: nft::{Module, Storage, Config<T>},
+
 	}
 );
 
