@@ -4,6 +4,9 @@ use frame_support::{debug, decl_module, dispatch::DispatchResult};
 use frame_system::ensure_signed;
 use sp_runtime::print;
 
+#[cfg(test)]
+mod tests;
+
 pub trait Config: frame_system::Config {}
 
 decl_module! {
