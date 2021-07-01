@@ -1004,6 +1004,28 @@ impl pallet_assets::Config for Runtime {
 	type WeightInfo = pallet_assets::weights::SubstrateWeight<Runtime>;
 }
 
+// ------------------------ Recipe pallets configuration ------------------------
+
+impl hello_substrate::Config for Runtime {}
+
+impl simple_event::Config for Runtime {
+	type Event = Event;
+}
+
+impl generic_event::Config for Runtime {
+	type Event = Event;
+}
+
+impl simple_map::Config for Runtime {
+	type Event = Event;
+}
+
+impl basic_token::Config for Runtime {
+	type Event = Event;
+}
+
+// ------------------------ End of Recipe configuration ------------------------
+
 // ------------------------ ORML nft configuration ------------------------
 
 impl orml_nft::Config for Runtime {
@@ -1057,6 +1079,12 @@ construct_runtime!(
 		Assets: pallet_assets::{Module, Call, Storage, Event<T>},
 		Mmr: pallet_mmr::{Module, Storage},
 		Lottery: pallet_lottery::{Module, Call, Storage, Event<T>},
+		// Recipe pallets
+		HelloSubstrate: hello_substrate::{Module, Call},
+		SimpleEvent: simple_event::{Module, Call, Event},
+		GenericEvent: generic_event::{Module, Call, Event<T>},
+		SimpleMap: simple_map::{Module, Call, Storage, Event<T>},
+		BasicToken: basic_token::{Module, Call, Storage, Event<T>},
 		// ORML nft module
 		NonFungibleTokenModule: orml_nft::{Module, Storage, Config<T>},
 	}

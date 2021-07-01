@@ -83,7 +83,14 @@ pallet-transaction-payment = { version = "3.0.0", default-features = false, path
 pallet-transaction-payment-rpc-runtime-api = { version = "3.0.0", default-features = false, path = "../../../frame/transaction-payment/rpc/runtime-api/" }
 pallet-vesting = { version = "3.0.0", default-features = false, path = "../../../frame/vesting" }
 
-# pallet dependencies
+# recipe pallet dependencies
+hello-substrate = { default-features = false, path = "../../../pallets/hello-substrate" }
+simple-event = { default-features = false, path = "../../../pallets/simple-event" }
+generic-event = { default-features = false, path = "../../../pallets/generic-event" }
+simple-map = { default-features = false, path = "../../../pallets/simple-map" }
+basic-token = { default-features = false, path = "../../../pallets/basic-token" }
+
+# orml pallet dependencies
 orml-nft = { default-features = false, path = "../../../pallets/nft" }
 
 [build-dependencies]
@@ -154,6 +161,13 @@ std = [
 	"pallet-society/std",
 	"pallet-recovery/std",
 	"pallet-vesting/std",
+	# recipe packages
+	"hello-substrate/std",
+	"simple-event/std",
+	"generic-event/std",
+	"simple-map/std",
+	"basic-token/std",
+	# orml packages
 	"orml-nft/std",
 ]
 runtime-benchmarks = [
