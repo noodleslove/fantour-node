@@ -116,7 +116,9 @@ pub fn create_full<C, P, SC, B>(
 		HeaderMetadata<Block, Error=BlockChainError> + Sync + Send + 'static,
 	C::Api: substrate_frame_rpc_system::AccountNonceApi<Block, AccountId, Index>,
 	C::Api: pallet_contracts_rpc::ContractsRuntimeApi<Block, AccountId, Balance, BlockNumber>,
+	C::Api: pallet_mmr_rpc::MmrRuntimeApi<Block, <Block as sp_runtime::traits::Block>::Hash>,
 	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
+	C::Api: fantour_rpc::FantourRuntimeApi<Block>,
 	C::Api: BabeApi<Block>,
 	C::Api: BlockBuilder<Block>,
 	P: TransactionPool + 'static,
@@ -126,7 +128,9 @@ pub fn create_full<C, P, SC, B>(
 {
 	use substrate_frame_rpc_system::{FullSystem, SystemApi};
 	use pallet_contracts_rpc::{Contracts, ContractsApi};
+	use pallet_mmr_rpc::{MmrApi, Mmr};
 	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApi};
+	use fantour_rpc::{Fantour, FantourApi};
 
 	let mut io = jsonrpc_core::IoHandler::default();
 	let FullDeps {
@@ -162,7 +166,13 @@ pub fn create_full<C, P, SC, B>(
 		ContractsApi::to_delegate(Contracts::new(client.clone()))
 	);
 	io.extend_with(
+		MmrApi::to_delegate(Mmr::new(client.clone()))
+	);
+	io.extend_with(
 		TransactionPaymentApi::to_delegate(TransactionPayment::new(client.clone()))
+	);
+	io.extend_with(
+		FantourApi::to_delegate(Fantour::new(client.clone()))
 	);
 	io.extend_with(
 		sc_consensus_babe_rpc::BabeApi::to_delegate(

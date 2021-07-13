@@ -25,7 +25,7 @@ use node_runtime::{
 	AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, ContractsConfig, CouncilConfig,
 	DemocracyConfig,GrandpaConfig, ImOnlineConfig, SessionConfig, SessionKeys, StakerStatus,
 	StakingConfig, ElectionsConfig, IndicesConfig, SocietyConfig, SudoConfig, SystemConfig,
-	TechnicalCommitteeConfig, wasm_binary_unwrap,
+	TechnicalCommitteeConfig, wasm_binary_unwrap, TokensConfig, OrmlNFTConfig,
 };
 use node_runtime::Block;
 use node_runtime::constants::currency::*;
@@ -78,71 +78,25 @@ fn session_keys(
 }
 
 fn staging_testnet_config_genesis() -> GenesisConfig {
-	// stash, controller, session-key
-	// generated with secret:
-	// for i in 1 2 3 4 ; do for j in stash controller; do subkey inspect "$secret"/fir/$j/$i; done; done
-	// and
-	// for i in 1 2 3 4 ; do for j in session; do subkey --ed25519 inspect "$secret"//fir//$j//$i; done; done
-
-	let initial_authorities: Vec<(AccountId, AccountId, GrandpaId, BabeId, ImOnlineId, AuthorityDiscoveryId)> = vec![(
-		// 5Fbsd6WXDGiLTxunqeK5BATNiocfCqu9bS1yArVjCgeBLkVy
-		hex!["9c7a2ee14e565db0c69f78c7b4cd839fbf52b607d867e9e9c5a79042898a0d12"].into(),
-		// 5EnCiV7wSHeNhjW3FSUwiJNkcc2SBkPLn5Nj93FmbLtBjQUq
-		hex!["781ead1e2fa9ccb74b44c19d29cb2a7a4b5be3972927ae98cd3877523976a276"].into(),
-		// 5Fb9ayurnxnaXj56CjmyQLBiadfRCqUbL2VWNbbe1nZU6wiC
-		hex!["9becad03e6dcac03cee07edebca5475314861492cdfc96a2144a67bbe9699332"].unchecked_into(),
-		// 5EZaeQ8djPcq9pheJUhgerXQZt9YaHnMJpiHMRhwQeinqUW8
-		hex!["6e7e4eb42cbd2e0ab4cae8708ce5509580b8c04d11f6758dbf686d50fe9f9106"].unchecked_into(),
-		// 5EZaeQ8djPcq9pheJUhgerXQZt9YaHnMJpiHMRhwQeinqUW8
-		hex!["6e7e4eb42cbd2e0ab4cae8708ce5509580b8c04d11f6758dbf686d50fe9f9106"].unchecked_into(),
-		// 5EZaeQ8djPcq9pheJUhgerXQZt9YaHnMJpiHMRhwQeinqUW8
-		hex!["6e7e4eb42cbd2e0ab4cae8708ce5509580b8c04d11f6758dbf686d50fe9f9106"].unchecked_into(),
-	),(
-		// 5ERawXCzCWkjVq3xz1W5KGNtVx2VdefvZ62Bw1FEuZW4Vny2
-		hex!["68655684472b743e456907b398d3a44c113f189e56d1bbfd55e889e295dfde78"].into(),
-		// 5Gc4vr42hH1uDZc93Nayk5G7i687bAQdHHc9unLuyeawHipF
-		hex!["c8dc79e36b29395413399edaec3e20fcca7205fb19776ed8ddb25d6f427ec40e"].into(),
-		// 5EockCXN6YkiNCDjpqqnbcqd4ad35nU4RmA1ikM4YeRN4WcE
-		hex!["7932cff431e748892fa48e10c63c17d30f80ca42e4de3921e641249cd7fa3c2f"].unchecked_into(),
-		// 5DhLtiaQd1L1LU9jaNeeu9HJkP6eyg3BwXA7iNMzKm7qqruQ
-		hex!["482dbd7297a39fa145c570552249c2ca9dd47e281f0c500c971b59c9dcdcd82e"].unchecked_into(),
-		// 5DhLtiaQd1L1LU9jaNeeu9HJkP6eyg3BwXA7iNMzKm7qqruQ
-		hex!["482dbd7297a39fa145c570552249c2ca9dd47e281f0c500c971b59c9dcdcd82e"].unchecked_into(),
-		// 5DhLtiaQd1L1LU9jaNeeu9HJkP6eyg3BwXA7iNMzKm7qqruQ
-		hex!["482dbd7297a39fa145c570552249c2ca9dd47e281f0c500c971b59c9dcdcd82e"].unchecked_into(),
-	),(
-		// 5DyVtKWPidondEu8iHZgi6Ffv9yrJJ1NDNLom3X9cTDi98qp
-		hex!["547ff0ab649283a7ae01dbc2eb73932eba2fb09075e9485ff369082a2ff38d65"].into(),
-		// 5FeD54vGVNpFX3PndHPXJ2MDakc462vBCD5mgtWRnWYCpZU9
-		hex!["9e42241d7cd91d001773b0b616d523dd80e13c6c2cab860b1234ef1b9ffc1526"].into(),
-		// 5E1jLYfLdUQKrFrtqoKgFrRvxM3oQPMbf6DfcsrugZZ5Bn8d
-		hex!["5633b70b80a6c8bb16270f82cca6d56b27ed7b76c8fd5af2986a25a4788ce440"].unchecked_into(),
-		// 5DhKqkHRkndJu8vq7pi2Q5S3DfftWJHGxbEUNH43b46qNspH
-		hex!["482a3389a6cf42d8ed83888cfd920fec738ea30f97e44699ada7323f08c3380a"].unchecked_into(),
-		// 5DhKqkHRkndJu8vq7pi2Q5S3DfftWJHGxbEUNH43b46qNspH
-		hex!["482a3389a6cf42d8ed83888cfd920fec738ea30f97e44699ada7323f08c3380a"].unchecked_into(),
-		// 5DhKqkHRkndJu8vq7pi2Q5S3DfftWJHGxbEUNH43b46qNspH
-		hex!["482a3389a6cf42d8ed83888cfd920fec738ea30f97e44699ada7323f08c3380a"].unchecked_into(),
-	),(
-		// 5HYZnKWe5FVZQ33ZRJK1rG3WaLMztxWrrNDb1JRwaHHVWyP9
-		hex!["f26cdb14b5aec7b2789fd5ca80f979cef3761897ae1f37ffb3e154cbcc1c2663"].into(),
-		// 5EPQdAQ39WQNLCRjWsCk5jErsCitHiY5ZmjfWzzbXDoAoYbn
-		hex!["66bc1e5d275da50b72b15de072a2468a5ad414919ca9054d2695767cf650012f"].into(),
-		// 5DMa31Hd5u1dwoRKgC4uvqyrdK45RHv3CpwvpUC1EzuwDit4
-		hex!["3919132b851ef0fd2dae42a7e734fe547af5a6b809006100f48944d7fae8e8ef"].unchecked_into(),
-		// 5C4vDQxA8LTck2xJEy4Yg1hM9qjDt4LvTQaMo4Y8ne43aU6x
-		hex!["00299981a2b92f878baaf5dbeba5c18d4e70f2a1fcd9c61b32ea18daf38f4378"].unchecked_into(),
-		// 5C4vDQxA8LTck2xJEy4Yg1hM9qjDt4LvTQaMo4Y8ne43aU6x
-		hex!["00299981a2b92f878baaf5dbeba5c18d4e70f2a1fcd9c61b32ea18daf38f4378"].unchecked_into(),
-		// 5C4vDQxA8LTck2xJEy4Yg1hM9qjDt4LvTQaMo4Y8ne43aU6x
-		hex!["00299981a2b92f878baaf5dbeba5c18d4e70f2a1fcd9c61b32ea18daf38f4378"].unchecked_into(),
-	)];
-
-	// generated with secret: subkey inspect "$secret"/fir
-	let root_key: AccountId = hex![
-		// 5Ff3iXP75ruzroPWRP2FYBHWnmGGBSb63857BgnzCoXNxfPo
-		"9ee5e5bdc0ec239eb164f865ecc345ce4c88e76ee002e0f7e318097347471809"
-	].into();
+  let root_key: AccountId = hex!["12970155d02df21b7e39e289593065d0bbb67d5d38f36dd1b9d617614a006d00"].into(); // 5znMeMdGsDrENMFg9wvLMveuYdCSVCCGdaXE6HAU4UwTksei
+  let initial_authorities: Vec<(AccountId, AccountId, GrandpaId, BabeId, ImOnlineId, AuthorityDiscoveryId)> = vec![
+    (
+      hex!["d0a9b0c9ac0a3dc0432cb66f288c1ffc9bd159ca52739d994f789003b08b6630"].into(),              // 655aHzD3sX1QpZVxStEHPV4TVCqKVcfwfxrsX8spZndPfabe
+      hex!["c43b6cda18d09359fe32ea27014601c6d723e17e2cc8ca14496f210595f95a26"].into(),              // 64oGxqAX2AW26AWQDx9vNNb7aTF741QMTn1n35qFRty6FaLc
+      hex!["184f5672c5f405f12476c29ba35ab22fdf44f4e50d671802cb271f06adb5cb3f"].unchecked_into(),    // 5zureDa91LCdspDmqxkPUnGg9WLHPJQLs1XZ9uqmkUEcK3Ca
+      hex!["2020fdf7ad624a75cb35367c68782984cd28e9d9cb93f37397b34602da766b60"].unchecked_into(),    // 6167FvHPZP7MrPZbJKkwXbxZSupoRmDcAt5RhC1B2NuC2D6G
+      hex!["2020fdf7ad624a75cb35367c68782984cd28e9d9cb93f37397b34602da766b60"].unchecked_into(),    // 6167FvHPZP7MrPZbJKkwXbxZSupoRmDcAt5RhC1B2NuC2D6G
+      hex!["2020fdf7ad624a75cb35367c68782984cd28e9d9cb93f37397b34602da766b60"].unchecked_into(),    // 6167FvHPZP7MrPZbJKkwXbxZSupoRmDcAt5RhC1B2NuC2D6G
+    ),
+    (
+      hex!["5e7704ab35a8a08fda1ca9ddca87013849daf02744e81cc5fb03d7395030744c"].into(),              // 62VqnJu5Xwc5qaNsQoeS8UAEA8rFFf8U6UeyeKgYQGfi23us
+      hex!["c23b0e2abab64d27c630028830d5a3afc4785f0dd02ce069af8b3f2118bc682c"].into(),              // 64kekuPLYqkAHwwbeYjVUDkPFoc27VNGib3ezJrXCTY2qWSm
+      hex!["b46c28b4f0db186814fe579e63d2e9b7c3dbb6c1f28dfe541a6cc11ccfc5fa3e"].unchecked_into(),    // 64SYg4L1MbtsREC8Qcrd42bMidA8bXq9jmNBYDwAg1fcuBm4
+      hex!["0478a4baa1b4a9b85470a4070738abf190734a2bb2af77dad6ae5fda182da773"].unchecked_into(),    // 5zTqxMT5SG1gsH7SrM5dn8nmi1Cp8R3U9sBU6E1jBKfLLzrv
+      hex!["0478a4baa1b4a9b85470a4070738abf190734a2bb2af77dad6ae5fda182da773"].unchecked_into(),    // 5zTqxMT5SG1gsH7SrM5dn8nmi1Cp8R3U9sBU6E1jBKfLLzrv
+      hex!["0478a4baa1b4a9b85470a4070738abf190734a2bb2af77dad6ae5fda182da773"].unchecked_into(),    // 5zTqxMT5SG1gsH7SrM5dn8nmi1Cp8R3U9sBU6E1jBKfLLzrv
+    ),
+  ];
 
 	let endowed_accounts: Vec<AccountId> = vec![root_key.clone()];
 
@@ -156,19 +110,19 @@ fn staging_testnet_config_genesis() -> GenesisConfig {
 
 /// Staging testnet config.
 pub fn staging_testnet_config() -> ChainSpec {
-	let boot_nodes = vec![];
 	let mut prop = sc_service::Properties::new();
 	prop.insert("tokenDecimals".to_string(), 12.into());
-	prop.insert("tokenSymbol".to_string(), "FANT".into());
+	prop.insert("tokenSymbol".to_string(), "FANT".into()); // NFT Mart Token
+	let boot_nodes = vec![];
 	ChainSpec::from_genesis(
-		"Staging Testnet",
-		"staging_testnet",
+		"Fantour Staging",
+		"fantour_staging",
 		ChainType::Live,
 		staging_testnet_config_genesis,
 		boot_nodes,
 		Some(TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])
 			.expect("Staging telemetry url is valid; qed")),
-		None,
+		Some("nftmart"),
 		Some(prop),
 		Default::default(),
 	)
@@ -249,19 +203,19 @@ pub fn testnet_genesis(
 	const STASH: Balance = ENDOWMENT / 1000;
 
 	GenesisConfig {
-		frame_system: Some(SystemConfig {
+		frame_system: SystemConfig {
 			code: wasm_binary_unwrap().to_vec(),
 			changes_trie_config: Default::default(),
-		}),
-		pallet_balances: Some(BalancesConfig {
+		},
+		pallet_balances: BalancesConfig {
 			balances: endowed_accounts.iter().cloned()
 				.map(|x| (x, ENDOWMENT))
 				.collect()
-		}),
-		pallet_indices: Some(IndicesConfig {
+		},
+		pallet_indices: IndicesConfig {
 			indices: vec![],
-		}),
-		pallet_session: Some(SessionConfig {
+		},
+		pallet_session: SessionConfig {
 			keys: initial_authorities.iter().map(|x| {
 				(x.0.clone(), x.0.clone(), session_keys(
 					x.2.clone(),
@@ -270,8 +224,8 @@ pub fn testnet_genesis(
 					x.5.clone(),
 				))
 			}).collect::<Vec<_>>(),
-		}),
-		pallet_staking: Some(StakingConfig {
+		},
+		pallet_staking: StakingConfig {
 			validator_count: initial_authorities.len() as u32 * 2,
 			minimum_validator_count: initial_authorities.len() as u32,
 			stakers: initial_authorities.iter().map(|x| {
@@ -280,56 +234,69 @@ pub fn testnet_genesis(
 			invulnerables: initial_authorities.iter().map(|x| x.0.clone()).collect(),
 			slash_reward_fraction: Perbill::from_percent(10),
 			.. Default::default()
-		}),
-		pallet_democracy: Some(DemocracyConfig::default()),
-		pallet_elections_phragmen: Some(ElectionsConfig {
+		},
+		pallet_democracy: DemocracyConfig::default(),
+		pallet_elections_phragmen: ElectionsConfig {
 			members: endowed_accounts.iter()
 						.take((num_endowed_accounts + 1) / 2)
 						.cloned()
 						.map(|member| (member, STASH))
 						.collect(),
-		}),
-		pallet_collective_Instance1: Some(CouncilConfig::default()),
-		pallet_collective_Instance2: Some(TechnicalCommitteeConfig {
+		},
+		pallet_collective_Instance1: CouncilConfig::default(),
+		pallet_collective_Instance2: TechnicalCommitteeConfig {
 			members: endowed_accounts.iter()
 						.take((num_endowed_accounts + 1) / 2)
 						.cloned()
 						.collect(),
 			phantom: Default::default(),
-		}),
-		pallet_contracts: Some(ContractsConfig {
+		},
+		pallet_contracts: ContractsConfig {
 			current_schedule: pallet_contracts::Schedule {
 				enable_println, // this should only be enabled on development chains
 				..Default::default()
 			},
-		}),
-		pallet_sudo: Some(SudoConfig {
+		},
+		pallet_sudo: SudoConfig {
 			key: root_key,
-		}),
-		pallet_babe: Some(BabeConfig {
+		},
+		pallet_babe: BabeConfig {
 			authorities: vec![],
-		}),
-		pallet_im_online: Some(ImOnlineConfig {
+			epoch_config: Some(node_runtime::BABE_GENESIS_EPOCH_CONFIG),
+		},
+		pallet_im_online: ImOnlineConfig {
 			keys: vec![],
-		}),
-		pallet_authority_discovery: Some(AuthorityDiscoveryConfig {
+		},
+		pallet_authority_discovery: AuthorityDiscoveryConfig {
 			keys: vec![],
-		}),
-		pallet_grandpa: Some(GrandpaConfig {
+		},
+		pallet_grandpa: GrandpaConfig {
 			authorities: vec![],
-		}),
-		pallet_membership_Instance1: Some(Default::default()),
-		pallet_treasury: Some(Default::default()),
-		pallet_society: Some(SocietyConfig {
+		},
+		pallet_membership_Instance1: Default::default(),
+		pallet_treasury: Default::default(),
+		pallet_society: SocietyConfig {
 			members: endowed_accounts.iter()
 						.take((num_endowed_accounts + 1) / 2)
 						.cloned()
 						.collect(),
 			pot: 0,
 			max_members: 999,
-		}),
-		pallet_vesting: Some(Default::default()),
-		orml_nft: Some(Default::default()),
+		},
+		pallet_vesting: Default::default(),
+		pallet_gilt: Default::default(),
+		orml_tokens: TokensConfig {
+			endowed_accounts: endowed_accounts.iter()
+				.flat_map(|x|{
+					vec![
+						(x.clone(), 2, 100 * sp_core::constants_types::ACCURACY),
+						(x.clone(), 3, 100 * sp_core::constants_types::ACCURACY),
+						(x.clone(), 4, 100 * sp_core::constants_types::ACCURACY),
+					]
+				}).collect(),
+		},
+		orml_nft: OrmlNFTConfig { tokens: vec![] },
+		fantour_nft: Default::default(),
 	}
 }
 
@@ -348,15 +315,15 @@ fn development_config_genesis() -> GenesisConfig {
 pub fn development_config() -> ChainSpec {
 	let mut prop = sc_service::Properties::new();
 	prop.insert("tokenDecimals".to_string(), 12.into());
-	prop.insert("tokenSymbol".to_string(), "FANT".into());
+	prop.insert("tokenSymbol".to_string(), "FANT".into()); // NFT Mart Token
 	ChainSpec::from_genesis(
 		"Fantour Development",
-		"fantour_dev",
+		"fantour_development",
 		ChainType::Development,
 		development_config_genesis,
 		vec![],
 		None,
-		None,
+		Some("fantour"),
 		Some(prop),
 		Default::default(),
 	)
@@ -378,15 +345,16 @@ fn local_testnet_genesis() -> GenesisConfig {
 pub fn local_testnet_config() -> ChainSpec {
 	let mut prop = sc_service::Properties::new();
 	prop.insert("tokenDecimals".to_string(), 12.into());
-	prop.insert("tokenSymbol".to_string(), "FANT".into());
+	prop.insert("tokenSymbol".to_string(), "FANT".into()); // NFT Mart Token
 	ChainSpec::from_genesis(
 		"Fantour Testnet",
 		"fantour_testnet",
 		ChainType::Local,
 		local_testnet_genesis,
 		vec![],
-		None,
-		None,
+		Some(TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])
+			.expect("Local Testnet telemetry url is valid; qed")),
+		Some("fantour"),
 		Some(prop),
 		Default::default(),
 	)
@@ -451,7 +419,7 @@ pub(crate) mod tests {
 				Ok(sc_service_test::TestNetComponents::new(task_manager, client, network, transaction_pool))
 			},
 			|config| {
-				let (keep_alive, _, _, client, network, transaction_pool) = new_light_base(config)?;
+				let (keep_alive, _, client, network, transaction_pool) = new_light_base(config)?;
 				Ok(sc_service_test::TestNetComponents::new(keep_alive, client, network, transaction_pool))
 			}
 		);

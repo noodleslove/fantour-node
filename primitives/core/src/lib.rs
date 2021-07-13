@@ -63,6 +63,7 @@ pub mod ed25519;
 pub mod sr25519;
 pub mod ecdsa;
 pub mod hash;
+pub mod constants_types;
 #[cfg(feature = "std")]
 mod hasher;
 pub mod offchain;
@@ -119,9 +120,10 @@ impl ExecutionContext {
 		match self {
 			Importing | Syncing | BlockConstruction =>
 				offchain::Capabilities::none(),
-			// Enable keystore and transaction pool by default for offchain calls.
+			// Enable keystore, transaction pool and Offchain DB reads by default for offchain calls.
 			OffchainCall(None) => [
 				offchain::Capability::Keystore,
+				offchain::Capability::OffchainDbRead,
 				offchain::Capability::TransactionPool,
 			][..].into(),
 			OffchainCall(Some((_, capabilities))) => *capabilities,

@@ -39,10 +39,10 @@ pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::Account
 pub type AccountIndex = u32;
 
 /// Balance of an account.
-pub type Balance = u128;
+pub type Balance = sp_core::constants_types::Balance;
 
 /// Type used for expressing timestamp.
-pub type Moment = u64;
+pub type Moment = sp_core::constants_types::Moment;
 
 /// Index of a transaction in the chain.
 pub type Index = u32;
@@ -63,19 +63,6 @@ pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 pub type Block = generic::Block<Header, OpaqueExtrinsic>;
 /// Block ID.
 pub type BlockId = generic::BlockId<Block>;
-
-// ------------------------ ORML nft configuration ------------------------
-
-/// NFT balance for nft module
-pub type NFTBalance = u128;
-/// Asset id type for assets module
-pub type AssetId = u32;
-/// Token amount type for tokens module
-pub type Amount = i128;
-/// Currency id for tokens module
-pub type CurrencyId = u64;
-
-// ------------------------ End of ORML configuration ------------------------
 
 /// App-specific crypto used for reporting equivocation/misbehavior in BABE and
 /// GRANDPA. Any rewards for misbehavior reporting will be paid out to this

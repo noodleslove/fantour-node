@@ -20,9 +20,10 @@
 /// Money matters.
 pub mod currency {
 	use node_primitives::Balance;
+	use sp_core::constants_types::ACCURACY;
 
-	pub const MILLICENTS: Balance = 1_000_000_000;
-	pub const CENTS: Balance = 1_000 * MILLICENTS;    // assume this is worth about a cent.
+	pub const MILLICENTS: Balance = ACCURACY / 1000;
+	pub const CENTS: Balance = ACCURACY;    // assume this is worth about a cent.
 	pub const DOLLARS: Balance = 100 * CENTS;
 
 	pub const fn deposit(items: u32, bytes: u32) -> Balance {
@@ -35,7 +36,7 @@ pub mod time {
 	use node_primitives::{Moment, BlockNumber};
 
 	/// Since BABE is probabilistic this is the average expected block time that
-	/// we are targetting. Blocks will be produced at a minimum duration defined
+	/// we are targeting. Blocks will be produced at a minimum duration defined
 	/// by `SLOT_DURATION`, but some slots will not be allocated to any
 	/// authority and hence no block will be produced. We expect to have this
 	/// block time on average following the defined slot duration and the value
@@ -51,7 +52,7 @@ pub mod time {
 	/// `SLOT_DURATION` should have the same value.
 	///
 	/// <https://research.web3.foundation/en/latest/polkadot/block-production/Babe.html#-6.-practical-results>
-	pub const MILLISECS_PER_BLOCK: Moment = 3000;
+	pub const MILLISECS_PER_BLOCK: Moment = 6000;
 	pub const SECS_PER_BLOCK: Moment = MILLISECS_PER_BLOCK / 1000;
 
 	pub const SLOT_DURATION: Moment = MILLISECS_PER_BLOCK;
