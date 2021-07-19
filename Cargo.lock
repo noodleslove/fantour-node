@@ -11063,9 +11063,9 @@ dependencies = [
 
 [[package]]
 name = "zeroize"
-version = "1.2.0"
+version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81a974bcdd357f0dca4d41677db03436324d45a4c9ed2d0b873a5a360ce41c36"
+checksum = "eeafe61337cb2c879d328b74aa6cd9d794592c82da6be559fdf11493f02a2d18"
 dependencies = [
  "zeroize_derive",
 ]
